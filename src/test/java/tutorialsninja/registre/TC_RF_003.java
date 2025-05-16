@@ -53,9 +53,7 @@ public class TC_RF_003 {
        Assert.assertTrue(driver.findElement(By.linkText("Edit your account information")).isDisplayed());
        driver.quit();
         
-        
-        
-	}
+        }
 
 	 public  String generatenewemail() {
 	 return new Date().toString().replaceAll("\\s", "").replaceAll("\\:", "")+"@gmail.com";
