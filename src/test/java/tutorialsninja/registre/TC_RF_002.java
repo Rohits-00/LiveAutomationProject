@@ -14,7 +14,6 @@ public class TC_RF_002 {
 		 Driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 		 Driver.get("https://www.amazon.in/");
 		 Driver.findElement(By.xpath("//span[text()='Hello, sign in']")).click();
-
-	}
+		 }
 
 }

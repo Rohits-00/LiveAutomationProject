@@ -1,63 +1,72 @@
 package tutorialsninja.registre;
 
-import static org.testng.Assert.assertTrue;
-
-import java.time.Duration;
-import java.util.Date;
+import java.util.Properties;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class TC_RF_001 {
-    
-	@Test
-     
-	public  void VerifyRegistreWithMandatoryField() {
-	    WebDriver Driver = new ChromeDriver();
-        Driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
-        Driver.manage().window().maximize();
-       Driver.get("https://tutorialsninja.com/demo/");
-       Driver.findElement(By.xpath("//span[text()='My Account']")).click();
-      // Driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-       Driver.findElement(By.linkText("Register")).click();
-      Driver.findElement(By.id("input-firstname")).sendKeys("Rohit");
-      Driver.findElement(By.id("input-lastname")).sendKeys("Sathe");
-      Driver.findElement(By.id("input-email")).sendKeys(generatenewemail());
-      Driver.findElement(By.id("input-telephone")).sendKeys("123456789");
-      Driver.findElement(By.id("input-password")).sendKeys("Rohit@12");
-      Driver.findElement(By.id("input-confirm")).sendKeys("Rohit@12");
-      Driver.findElement(By.cssSelector("input[type='checkbox']")).click();
-      Driver.findElement(By.cssSelector("input[type='submit']")).click();
-      
-      Assert.assertTrue(Driver.findElement(By.linkText("Logout")).isDisplayed());
-      String expectedHeading= "Your Account Has Been Created!";
-      
-      //System.out.println("---------------------------------------------------------------------"+Driver.findElement(By.xpath("//div[@id='common-success']//h1']")).getText());
-     Assert.assertEquals(Driver.findElement(By.xpath("//div[@id=\"content\"]//h1[text()=\"Your Account Has Been Created!\"]")).getText(), expectedHeading );
-   
-     String ActualProperDetailsOne = "Congratulations! Your new account has been successfully created!";
-     String ActualProperDetailsTwo = "You can now take advantage of member privileges to enhance your online shopping experience with us.";
-     String ActualProperDetailThree = "If you have ANY questions about the operation of this online shop, please e-mail the store owner.";
-     String ActualProperDetailFour = " contact us.";
-     
-      String ExpectedProperDetail = Driver.findElement(By.id("content")).getText();
-     Assert.assertTrue(ExpectedProperDetail.contains(ActualProperDetailsOne));
-     Assert.assertTrue(ExpectedProperDetail.contains(ActualProperDetailsTwo));
-     Assert.assertTrue(ExpectedProperDetail.contains(ActualProperDetailThree));
-     Assert.assertTrue(ExpectedProperDetail.contains(ActualProperDetailFour));
-     
-     Driver.findElement(By.linkText("Continue")).click();
-     
-     Assert.assertTrue(Driver.findElement(By.linkText("Edit your account information")).isDisplayed());
-     Driver.quit();
-     
-	}
+import base.BasePage;
+import pageobject.AccountPage;
+import pageobject.AccountSuccessPage;
+import pageobject.HomePage;
+import pageobject.RegisterPage;
+import utility.CommonUtils;
 
-	 public String generatenewemail() {
-     return new Date().toString().replaceAll("\\s", "").replaceAll("\\:", "")+"@gmail.com";
-			
-	 }
-}
+public class TC_RF_001 extends BasePage{
+	   WebDriver Driver;
+	   Properties prop;
+	   HomePage homePage;
+	   RegisterPage registerPage;
+	   AccountSuccessPage accountSuccessPage;
+	   AccountPage accountpage; 
+	   
+	   @BeforeMethod
+	   public void setup() {
+		  Driver= openBrowserAndApplication(); 
+		 prop = CommonUtils.loadproperties();
+		homePage=new HomePage(Driver);
+		homePage.clickOnMyAccount();
+	   registerPage = homePage.clickOnRegister();
+	   }
+	  
+	   @AfterMethod
+	   public void teardown() {
+		if(Driver !=null)
+		Driver.quit();
+	}
+	@Test
+     public  void VerifyRegistreWithMandatoryField() {
+	  
+	 registerPage.enterFirstName(prop.getProperty("firstName"));
+	 registerPage.enterLastName(prop.getProperty("lastName"));
+     registerPage.enterEmail(CommonUtils.generatenewemail());
+     registerPage.enterPhoneNumber(prop.getProperty("phoneNumber"));
+     registerPage.enterPassword(prop.getProperty("validPassword"));
+     registerPage.enterConfirmPassword(prop.getProperty("validPassword"));
+     registerPage.selectPrivacyPolicy();
+     accountSuccessPage = registerPage.clickContinueButton();
+     Assert.assertTrue(accountSuccessPage.isUserLoggedIn());
+     String expectedHeading= "Your Account Has Been Created!";
+      
+     
+     //System.out.println("---------------------------------------------------------------------"+Driver.findElement(By.xpath("//div[@id='common-success']//h1']")).getText());
+      
+     Assert.assertEquals(accountSuccessPage.getPageHeading(), expectedHeading );
+     String expectedProperDetailsOne = "Congratulations! Your new account has been successfully created!";
+     String expectedProperDetailsTwo = "You can now take advantage of member privileges to enhance your online shopping experience with us.";
+     String expectedProperDetailThree = "If you have ANY questions about the operation of this online shop, please e-mail the store owner.";
+     String expectedProperDetailFour = " contact us.";
+     String actualProperDetail = accountSuccessPage.getPageContent();
+     Assert.assertTrue(actualProperDetail.contains(expectedProperDetailsOne));
+     Assert.assertTrue(actualProperDetail.contains(expectedProperDetailsTwo));
+     Assert.assertTrue(actualProperDetail.contains(expectedProperDetailThree));
+     Assert.assertTrue(actualProperDetail.contains(expectedProperDetailFour));
+     accountpage = accountSuccessPage.clickOnContinueButton();
+     Assert.assertTrue(accountpage.didWeNavigateToAccountpage());
+    }
+ }
+
