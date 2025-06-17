@@ -24,6 +24,9 @@ public class AccountSuccessPage {
 	@FindBy(linkText  = "Continue")
 	private WebElement continueButton;
 	
+	@FindBy(xpath ="//ul[@class=\"breadcrumb\"]//a[text()='Success']")        
+	private WebElement accountSuccessPageBreadCrumb;
+	
 	public boolean isUserLoggedIn () {
 		return logoutoption.isDisplayed();
 		
@@ -38,4 +41,8 @@ public class AccountSuccessPage {
 		 continueButton.click();
 		 return new AccountPage(driver);
 	}
+	public boolean didWeNavigateToAccountSuccessPage() {
+		 return accountSuccessPageBreadCrumb.isDisplayed();
+	}
 }
+

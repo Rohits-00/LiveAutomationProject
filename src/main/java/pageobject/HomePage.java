@@ -19,11 +19,10 @@ public class HomePage {
     private WebElement registerOption;
 	
 	public void clickOnMyAccount() {
-		myAccountMenu.click();
+	myAccountMenu.click();
 	}
 	public RegisterPage clickOnRegister() {
-		registerOption.click();
-		return new RegisterPage(driver);
+	registerOption.click();
+	return new RegisterPage(driver);
 	}
-	}
-
+}

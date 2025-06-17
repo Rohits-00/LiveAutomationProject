@@ -12,11 +12,18 @@ public class AccountPage {
 	 this.driver=driver;
 	 PageFactory.initElements(driver, this);
 	 
- }
- @FindBy(linkText = "Edit your account information")
- private WebElement editYoutAccountInformationOption;
+    }
+    @FindBy(linkText = "Edit your account information")
+    private WebElement editYoutAccountInformationOption;
  
- public boolean didWeNavigateToAccountpage() {
+    @FindBy(linkText = "Subscribe / unsubscribe to newsletter")
+    private WebElement subscribeUnsubscribeNewsLetterOption;
+    
+     public boolean didWeNavigateToAccountpage() {
 	 return editYoutAccountInformationOption.isDisplayed();
+     }
+	 public void slectSubscribeUnsubscribeOption() {
+		 subscribeUnsubscribeNewsLetterOption.click();
+	 }
  }
-}
+
