@@ -22,8 +22,11 @@ public class AccountPage {
      public boolean didWeNavigateToAccountpage() {
 	 return editYoutAccountInformationOption.isDisplayed();
      }
-	 public void slectSubscribeUnsubscribeOption() {
+	 public NewsLetterPage selectSubscribeUnsubscribeNewsletterOption() {
 		 subscribeUnsubscribeNewsLetterOption.click();
+		 return new NewsLetterPage(driver);
 	 }
- }
+	
+	}
+ 
 

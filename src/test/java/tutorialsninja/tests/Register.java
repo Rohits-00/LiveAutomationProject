@@ -13,6 +13,8 @@ import base.BasePage;
 import pageobject.AccountPage;
 import pageobject.AccountSuccessPage;
 import pageobject.HomePage;
+import pageobject.LoginPage;
+import pageobject.NewsLetterPage;
 import pageobject.RegisterPage;
 import utility.CommonUtils;
 
@@ -23,6 +25,8 @@ public class Register extends BasePage{
 	   RegisterPage registerPage;
 	   AccountSuccessPage accountSuccessPage;
 	   AccountPage accountpage; 
+	   NewsLetterPage newsletterPage;
+	   LoginPage loginPage;
 	   
 	   @BeforeMethod
 	   public void setup() {
@@ -100,7 +104,9 @@ public class Register extends BasePage{
 	   
 	    @Test(priority = 3)
 	    public  void VerifyAccountFieldWithoutMandatoryField() {  
-		registerPage.clickContinueButton();
+		
+	    	
+       registerPage.clickContinueButton();
 		
 		String expectedFristNameWarning="First Name must be between 1 and 32 characters!";
 		String expectedLastNameWarning="Last Name must be between 1 and 32 characters!";
@@ -128,12 +134,42 @@ public class Register extends BasePage{
 	    accountSuccessPage=registerPage.clickContinueButton();
 	    accountpage= accountSuccessPage.clickOnContinueButton();
 	    // driver.findElement(By.xpath("//input[@name=\"newsletter\"][@value='1']")).click();
-	    accountpage.slectSubscribeUnsubscribeOption();
-	      
+	    newsletterPage = accountpage.selectSubscribeUnsubscribeNewsletterOption();
+	    //driver.findElement(By.xpath("//input[@name=\"newsletter\"][@value='1']")).click();
+	    Assert.assertTrue(newsletterPage.didWeNavigateToNewsletterBreadCrumb());
+	    Assert.assertTrue(newsletterPage.isYesNewsletterOptionSelected());
+}
 	    
-	     
-	      //driver.findElement(By.xpath("//input[@name=\"newsletter\"][@value='1']")).click();
-	      Assert.assertTrue(driver.findElement(By.linkText("Newsletter")).isDisplayed());
-	      Assert.assertTrue(driver.findElement(By.xpath("//input[@name=\"newsletter\"][@value='1']")).isSelected());
+	    @Test(priority = 5)
+		public  void VerifyRegistretingAccountBySayingNoToNewletter () {
+	    	
+		registerPage.enterFirstName(prop.getProperty("firstName"));
+		registerPage.enterLastName(prop.getProperty("lastName"));
+		registerPage.enterEmail(CommonUtils.generatenewemail());
+		registerPage.enterPhoneNumber(prop.getProperty("phoneNumber"));
+        registerPage.enterPassword(prop.getProperty("validPassword"));
+	    registerPage.enterConfirmPassword(prop.getProperty("validPassword"));
+	    registerPage.selectYesNewsletterOption();
+		registerPage.selectPrivacyPolicy();
+	    accountSuccessPage= registerPage.clickContinueButton();
+		accountpage=accountSuccessPage.clickOnContinueButton();
+		newsletterPage=accountpage.selectSubscribeUnsubscribeNewsletterOption();
+	    Assert.assertTrue(newsletterPage.didWeNavigateToNewsletterBreadCrumb());
+		Assert.assertFalse(newsletterPage.isNoNewsletterOptionSelected());
+}
+	    
+	    @Test(priority = 6)            
+		public  void VerifyNavigationToRegisterAccountBusingMultipleWays() {   
+	    	
+	   
+			Assert.assertTrue(registerPage.didWeNagigateToRegisterAccountPage());
+			registerPage.clickOnMyAccountDropMenu();
+	        loginPage = registerPage.selectloginOption();
+			loginPage.clickOnContinueButton();
+		    Assert.assertTrue(registerPage.didWeNagigateToRegisterAccountPage());
+		    registerPage.clickOnMyAccountDropMenu();
+	        loginPage = registerPage.selectloginOption();
+		    loginPage.clickOnRegisterOption();
+		     Assert.assertTrue(registerPage.didWeNagigateToRegisterAccountPage());
 }
 }

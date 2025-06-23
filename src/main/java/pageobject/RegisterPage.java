@@ -36,6 +36,12 @@ public class RegisterPage {
 	@FindBy(css = "input[type='submit']")
 	private WebElement continueButton;
 	
+	@FindBy(xpath = "//input[@name=\"newsletter\"][@value='1']")
+	private WebElement yesNewsletterOption;
+	
+	@FindBy(xpath = "//input[@type=\"radio\"][@value='0']")
+	private WebElement noNewsletterOption;
+	
 	@FindBy(xpath="//div[text()=\"First Name must be between 1 and 32 characters!\"]")
 	private WebElement firstNameWarningMessage;
 	
@@ -45,7 +51,6 @@ public class RegisterPage {
 	@FindBy(xpath = "//input[@id=\"input-email\"]/following-sibling::div")
 	private WebElement emailWarningMessage;
 	
-	
 	@FindBy(xpath = "//input[@id=\"input-telephone\"]/following-sibling::div")
 	private WebElement phoneNumberWarningMessage;
 	
@@ -54,6 +59,15 @@ public class RegisterPage {
 	
 	@FindBy(xpath = "//div[text()='Warning: You must agree to the Privacy Policy!']")
 	private WebElement privacyPolicyWarningMessage;
+	
+	@FindBy(xpath = "//ul[@class=\"breadcrumb\"]//a[text()='Register']")
+	private WebElement registerBreadcrumb;
+	
+	@FindBy(xpath = "//span[text()='My Account']")
+	private WebElement myAccountDropMenu;
+	
+	@FindBy(linkText = "Login")
+	private WebElement loginOption;
 	
 	public void enterFirstName(String firstNameText) {
 		firstNameField.sendKeys(firstNameText);
@@ -80,6 +94,14 @@ public class RegisterPage {
     	continueButton.click();
     	return new AccountSuccessPage(driver);
     }
+    
+    public void selectYesNewsletterOption() {
+    	yesNewsletterOption.click();
+    }
+    
+    public void selectNoNewsletterOption() {
+    	noNewsletterOption.click();
+    }
     public String getFirstNameWarning() {
       return firstNameWarningMessage.getText();
     }
@@ -98,4 +120,16 @@ public class RegisterPage {
     public String getPrivacyPolicyWarning() {
     	return privacyPolicyWarningMessage.getText();
     }
+    
+    public boolean didWeNagigateToRegisterAccountPage() {
+    	return registerBreadcrumb.isDisplayed();
+    }
+    
+    public void clickOnMyAccountDropMenu() {
+    	myAccountDropMenu.click();
+    }
+     public LoginPage selectloginOption() {
+    	 loginOption.click();
+    	 return new LoginPage(driver);
+     }
 }

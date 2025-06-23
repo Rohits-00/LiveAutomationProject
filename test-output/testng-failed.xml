@@ -7,7 +7,7 @@
         <methods>
           <include name="setup"/>
           <include name="teardown"/>
-          <include name="VerifyRegistreAccountWithAllFields"/>
+          <include name="VerifyingRegisteringAccountBySubscribingToNewLetter"/>
         </methods>
       </class> <!-- tutorialsninja.tests.Register -->
     </classes>
