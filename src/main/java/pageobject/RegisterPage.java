@@ -69,6 +69,12 @@ public class RegisterPage {
 	@FindBy(linkText = "Login")
 	private WebElement loginOption;
 	
+	@FindBy(xpath ="//input[@id='input-confirm']/following-sibling::div")            
+	private WebElement passwordConfirmWarningMessage;
+	
+	@FindBy(xpath = "//div[@class=\"alert alert-danger alert-dismissible\"]")
+	private WebElement existingEmailWarningMessage;
+	
 	public void enterFirstName(String firstNameText) {
 		firstNameField.sendKeys(firstNameText);
 	}
@@ -132,4 +138,29 @@ public class RegisterPage {
     	 loginOption.click();
     	 return new LoginPage(driver);
      }
+     public String getPasswordConfirmWarring() {
+    	 return passwordConfirmWarningMessage.getText();
+     }
+     public String getExistingEmailWarning() {
+    	 return existingEmailWarningMessage.getText();
+     }
+     public String getPlaceHolderTextFromFirstNameFiled() {
+    	 return firstNameField.getDomAttribute("placeholder");     
+    	 }
+     public String getPlaceHolderTextFromLastNameFiled() {
+    	 return lastNamefiled.getDomAttribute("placeholder");
+     }
+     public String getPlaceHolderTextFromEmailFiled() {
+    	 return emailFiled.getDomAttribute("placeholder");
+     }
+     public String getPlaceHolderTextFromPhonenumberField() {
+    	 return telePhoneField.getDomAttribute("placeholder");
+     }
+     public String getPlaceHolderTextFromPasswordField() {
+    	 return passwordField.getDomAttribute("placeholder");
+     }
+  public String getPlaceHolderTextFromConfirmPasswordFiled() {
+	  return confirmPasswordField.getDomAttribute("placeholder");
+  }
 }
+     

@@ -8,6 +8,8 @@
           <include name="setup"/>
           <include name="teardown"/>
           <include name="VerifyingRegisteringAccountBySubscribingToNewLetter"/>
+          <include name="VerifyingRegisteringAccountUsingKeyboardKeys"/>
+          <include name="VerifyRegisteringAccountByProvidingInvalidPhoneNumber"/>
         </methods>
       </class> <!-- tutorialsninja.tests.Register -->
     </classes>

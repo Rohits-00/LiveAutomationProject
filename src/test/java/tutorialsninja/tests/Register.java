@@ -1,9 +1,12 @@
 package tutorialsninja.tests;
 
+import java.time.Duration;
 import java.util.Properties;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -171,5 +174,79 @@ public class Register extends BasePage{
 	        loginPage = registerPage.selectloginOption();
 		    loginPage.clickOnRegisterOption();
 		     Assert.assertTrue(registerPage.didWeNagigateToRegisterAccountPage());
+}
+	    @Test(priority = 7)
+		public  void VerifyRegisteringAccountByProvidingMissMatchPassword() throws InterruptedException {
+		
+	    	registerPage.enterFirstName(prop.getProperty("firstName"));
+			registerPage.enterLastName(prop.getProperty("lastName"));
+			registerPage.enterEmail(CommonUtils.generatenewemail());
+			registerPage.enterPhoneNumber(prop.getProperty("phoneNumber"));
+			registerPage.enterPassword(prop.getProperty("validPassword"));
+			registerPage.enterConfirmPassword(prop.getProperty("massMatchPassword"));			
+			registerPage.selectYesNewsletterOption();
+			registerPage.selectPrivacyPolicy();
+			registerPage.clickContinueButton();
+            String expectedwarningmessage="Password confirmation does not match password!";
+		    Assert.assertEquals(registerPage.getPasswordConfirmWarring(), expectedwarningmessage);
+	    }
+	    
+	    @Test(priority = 8)
+		public void VerifyingRegisteringAccountWithExistingEmail() {
+	    	registerPage.enterFirstName(prop.getProperty("firstName"));
+	    	registerPage.enterLastName(prop.getProperty("lastName"));
+			registerPage.enterEmail(prop.getProperty("existingemail"));
+		    registerPage.enterPhoneNumber(prop.getProperty("phoneNumber"));
+			registerPage.enterPassword(prop.getProperty("validPassword"));
+		    registerPage.enterConfirmPassword(prop.getProperty("validPassword"));
+		    registerPage.selectYesNewsletterOption();
+			registerPage.selectPrivacyPolicy();
+		    registerPage.clickContinueButton();	
+			String expectedwarningmessage="Warning: E-Mail Address is already registered!";
+			Assert.assertEquals(registerPage.getExistingEmailWarning(), expectedwarningmessage);
+}
+	    @Test(priority = 9)
+	    public void VerifyRegisteringAccountByProvidingInvalidPhoneNumber () {
+			registerPage.enterFirstName(prop.getProperty("firstName"));
+			registerPage.enterLastName(prop.getProperty("lastName"));
+			registerPage.enterEmail(CommonUtils.generatenewemail());
+			registerPage.enterPhoneNumber(prop.getProperty("invalidNumber"));
+			registerPage.enterPassword(prop.getProperty("validPassword"));
+			registerPage.enterConfirmPassword(prop.getProperty("validPassword"));
+			registerPage.selectYesNewsletterOption();
+			registerPage.selectPrivacyPolicy();
+		    registerPage.clickContinueButton();	
+			String expectedwarningmessage = "Telephone number does not appear to be valid";
+			Assert.assertEquals(registerPage.getPhoneNumberWarning(), expectedwarningmessage);
+} 
+	    @Test(priority = 10)
+		public void VerifyingRegisteringAccountUsingKeyboardKeys () {
+		Actions action = new Actions(driver);	
+		  for (int i = 1; i<=23; i++) {
+			action.sendKeys(Keys.TAB).perform();
+			}
+		  action.sendKeys(prop.getProperty("firstName")).pause(Duration.ofSeconds(1)).sendKeys(Keys.TAB).sendKeys(prop.getProperty("lastName")).sendKeys(Keys.TAB).sendKeys(CommonUtils.generatenewemail())
+			.sendKeys(Keys.TAB).sendKeys(prop.getProperty("phoneNumber")).sendKeys(Keys.TAB).sendKeys(prop.getProperty("validPassword")).sendKeys(Keys.TAB).sendKeys(prop.getProperty("validPassword")).sendKeys(Keys.TAB)
+			.sendKeys(Keys.LEFT).sendKeys(Keys.TAB).sendKeys(Keys.TAB).sendKeys(Keys.SPACE).sendKeys(Keys.TAB)
+			.sendKeys(Keys.ENTER).build().perform();
+		  Assert.assertTrue(accountSuccessPage.isUserLoggedIn());
+	    
+}
+	    @Test(priority = 11)
+		public void VerifyPlaceHoldersOfTextfiledInRegisterAccountField () {
+			
+			String expectedfirstnameplaceholdertext = "First Name";
+			
+			Assert.assertEquals(registerPage.getPlaceHolderTextFromFirstNameFiled(), expectedfirstnameplaceholdertext);
+			String expectedlastnameplaceholdertext = "Last Name";
+			Assert.assertEquals(registerPage.getPlaceHolderTextFromLastNameFiled(), expectedlastnameplaceholdertext);
+			String expectedemailplaceholdertext="E-Mail";
+			Assert.assertEquals(registerPage.getPlaceHolderTextFromEmailFiled(), expectedemailplaceholdertext);
+			String expectedtelephoneplaceholdertext="Telephone";
+			Assert.assertEquals(registerPage.getPlaceHolderTextFromPhonenumberField(), expectedtelephoneplaceholdertext);
+			String expectedpasswordplaceholdertextfield="Password";
+			Assert.assertEquals(registerPage.getPlaceHolderTextFromPasswordField(), expectedpasswordplaceholdertextfield);
+			String expectedconfirmpasswordplaceholdertext="Password Confirm";
+			Assert.assertEquals(registerPage.getPlaceHolderTextFromConfirmPasswordFiled(), expectedconfirmpasswordplaceholdertext);
 }
 }
